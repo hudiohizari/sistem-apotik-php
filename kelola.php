@@ -28,7 +28,7 @@ error_reporting(0);
 				updateManusia('karyawan', $_POST['primary'], $_POST['nama'], $_POST['no_telp'], $_POST['jenis_kelamin'], $_POST['alamat']);			
 				header("Location: kelola.php?kelola=karyawan");
 			}
-
+			
 			if($_POST['submit'] == "Tambah Pelanggan"){
 				insertManusia('pelanggan', $_POST['nama'], $_POST['no_telp'], $_POST['jenis_kelamin'], $_POST['alamat']);
 				header("Location: kelola.php?kelola=pelanggan");
@@ -37,10 +37,27 @@ error_reporting(0);
 				updateManusia('pelanggan', $_POST['primary'], $_POST['nama'], $_POST['no_telp'], $_POST['jenis_kelamin'], $_POST['alamat']);			
 				header("Location: kelola.php?kelola=pelanggan");
 			}
+
+			if($_POST['submit'] == "Tambah Obat"){
+				insertObat($_POST['nama'], $_POST['jenis'], $_POST['harga'], $_POST['stok']);
+				header("Location: kelola.php?kelola=obat");
+			}
+			else if($_POST['submit'] == "Edit Obat"){
+				updateObat($_POST['primary'], $_POST['nama'], $_POST['jenis'], $_POST['harga'], $_POST['stok']);			
+				header("Location: kelola.php?kelola=obat");
+			}
 		}
 		else if(isset($_GET['hapus'])) {
-			hapusManusia($_GET['hapus'], $_GET['primary'], $_POST['nama'], $_POST['no_telp'], $_POST['jenis_kelamin'], $_POST['alamat']);			
-			header("Location: kelola.php?kelola=".$_GET['hapus']);
+			if($_GET['hapus'] == "obat"){
+				hapusObat($_GET['primary']);			
+				header("Location: kelola.php?kelola=obat");
+			}
+			elseif($_GET['hapus'] == "transaksi"){
+			}
+			else{
+				hapusManusia($_GET['hapus'], $_GET['primary'], $_POST['nama'], $_POST['no_telp'], $_POST['jenis_kelamin'], $_POST['alamat']);			
+				header("Location: kelola.php?kelola=".$_GET['hapus']);
+			}
 		}
 		else if(isset($_GET['kelola'])) {
 			if ($_GET['kelola'] == "dokter" || $_GET['kelola'] == "edit_dokter") {
@@ -313,8 +330,90 @@ error_reporting(0);
 				<a href="index.php">kembali ke Index</a>
 				<?php
 			}
-			else if($_GET['kelola'] == "obat"){
-	
+			else if($_GET['kelola'] == "obat" || $_GET['kelola'] == "edit_obat"){
+				if ($_GET['kelola'] == "edit_obat"){
+					$res = getSingleObat($_GET['primary']);
+					$obat = mysqli_fetch_array($res);
+				}
+				?>
+				<form action="kelola.php" method="post">
+					<?php
+					if($_GET['kelola'] == "obat"){
+						?>
+						<h3 style="margin-bottom:10px;display:inline">Tambah Obat</h3>
+						<?php
+					}
+					else{
+						?>
+						<h3 style="margin-bottom:10px;display:inline">Edit Obat</h3>
+						<input type="hidden" name="primary" size="25" value="<?php echo $obat['no_obat']; ?>">
+						<?php
+					}
+					?>
+					<table border="0">
+						<tr>
+							<td>Nama Obat</td>
+							<td><input type="text" name="nama" size="25" value="<?php echo $obat['nama_obat']; ?>"></td>
+						</tr>
+						<tr>
+							<td>Jenis Obat</td>
+							<td><input type="text" name="jenis" size="25" value="<?php echo $obat['jenis_obat']; ?>"></td>
+						</tr>
+						<tr>
+							<td>Harga</td>
+							<td><input type="number" name="harga" size="25" value="<?php echo $obat['harga']; ?>"></td>
+						</tr>
+						<tr>
+							<td>Stok</td>
+							<td><input type="number" name="stok" size="25" value="<?php echo $obat['stok']; ?>"></td>
+						</tr>
+						<tr>
+							<?php
+							if($_GET['kelola'] == "obat"){
+								?>
+								<td><input type="submit" value="Tambah Obat" name="submit"></td>
+								<?php
+							}
+							else{
+								?>
+								<td><input type="submit" value="Edit Obat" name="submit"></td>
+								<?php
+							}
+							?>
+						</tr>
+					</table>
+				</form>
+				<h3 style="margin-bottom:0;margin-top:20px;">Daftar Obat</h3>
+				<table border="1">
+					<tr>
+						<td>Nomor Obat</td>
+						<td>Nama Obat</td>
+						<td>Jenis</td>
+						<td>Harga</td>
+						<td>Stok</td>
+						<td>Aksi</td>
+					</tr>
+					<?php
+						$result = getAllObat();
+						while($row = mysqli_fetch_array($result)) {
+							echo '
+							<tr>
+								<td>'.$row["no_obat"].'</td>
+								<td>'.$row["nama_obat"].'</td>
+								<td>'.$row["jenis_obat"].'</td>
+								<td>Rp '.$row["harga"].'</td>
+								<td>'.$row["stok"].' buah</td>
+								<td>
+									<a href="kelola.php?kelola=edit_obat&primary='.$row["no_obat"].'">edit</a> |
+									<a href="kelola.php?hapus=obat&primary='.$row["no_obat"].'">hapus</a>
+								</td>
+							</tr>
+							';
+						}
+					?>
+				</table>
+				<a href="index.php">kembali ke Index</a>
+				<?php
 			}
 			else if($_GET['kelola'] == "transaksi"){
 	

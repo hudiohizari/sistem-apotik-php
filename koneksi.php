@@ -49,6 +49,28 @@
 		$sql = "select * from obat";
 		return mysqli_query($conn, $sql);
 	}
+	function insertObat($nama, $jenis, $harga, $stok){
+		global $conn;
+		$sql = "insert into obat values ('', '$nama', '$jenis', '$harga', '$stok')";
+		mysqli_query($conn, $sql);
+	}
+	function updateObat($primary, $nama, $jenis, $harga, $stok){
+		global $conn;
+		$sql = "
+			update obat set
+			nama_obat = '$nama',
+			jenis_obat = '$jenis',
+			harga = '$harga',
+			stok = '$stok'
+			where no_obat = $primary
+		";
+		mysqli_query($conn, $sql);
+	}
+	function hapusObat($primary){
+		global $conn;
+		$sql = "delete from obat where no_obat = $primary";
+		mysqli_query($conn, $sql);
+	}
 	//End
 
 	//Transaksi
@@ -63,4 +85,11 @@
 		return mysqli_query($conn, $sql);
 	}
 	//End
+
+/*
+if (!mysqli_query($conn, $sql)){
+	echo("Error description: " . mysqli_error($conn));
+}
+*/
+
 ?>
