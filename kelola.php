@@ -10,7 +10,8 @@ error_reporting(0);
 	</head>
 	<body>
 		<?php
-		if(isset($_POST['submit'])){
+		if(isset($_POST['submit'])){ // ini buat tombol edit atau tambah ditekan
+			//tombol Edit tambah Dokter
 			if($_POST['submit'] == "Tambah Dokter"){
 				insertManusia('dokter', $_POST['nama'], $_POST['no_telp'], $_POST['jenis_kelamin'], $_POST['alamat']);
 				header("Location: kelola.php?kelola=dokter");
@@ -19,7 +20,9 @@ error_reporting(0);
 				updateManusia('dokter', $_POST['primary'], $_POST['nama'], $_POST['no_telp'], $_POST['jenis_kelamin'], $_POST['alamat']);			
 				header("Location: kelola.php?kelola=dokter");
 			}
-
+			//Selesai tombol edit tambah dokter
+			
+			//Edit tambah Karyawan
 			if($_POST['submit'] == "Tambah Karyawan"){
 				insertManusia('karyawan', $_POST['nama'], $_POST['no_telp'], $_POST['jenis_kelamin'], $_POST['alamat']);
 				header("Location: kelola.php?kelola=karyawan");
@@ -28,7 +31,9 @@ error_reporting(0);
 				updateManusia('karyawan', $_POST['primary'], $_POST['nama'], $_POST['no_telp'], $_POST['jenis_kelamin'], $_POST['alamat']);			
 				header("Location: kelola.php?kelola=karyawan");
 			}
+			//Selesai tombol edit tambah Karyawan
 			
+			//Edit tambah Obat
 			if($_POST['submit'] == "Tambah Pelanggan"){
 				insertManusia('pelanggan', $_POST['nama'], $_POST['no_telp'], $_POST['jenis_kelamin'], $_POST['alamat']);
 				header("Location: kelola.php?kelola=pelanggan");
@@ -37,7 +42,9 @@ error_reporting(0);
 				updateManusia('pelanggan', $_POST['primary'], $_POST['nama'], $_POST['no_telp'], $_POST['jenis_kelamin'], $_POST['alamat']);			
 				header("Location: kelola.php?kelola=pelanggan");
 			}
+			//Selesai tombol edit tambah Obat
 			
+			//Edit tombol tambah Obat
 			if($_POST['submit'] == "Tambah Obat"){
 				insertObat($_POST['nama'], $_POST['jenis'], $_POST['harga'], $_POST['stok']);
 				header("Location: kelola.php?kelola=obat");
@@ -46,7 +53,9 @@ error_reporting(0);
 				updateObat($_POST['primary'], $_POST['nama'], $_POST['jenis'], $_POST['harga'], $_POST['stok']);			
 				header("Location: kelola.php?kelola=obat");
 			}
-
+			//Selesai tombol edit tambah Obat
+			
+			//Edit tombol tambah Transaksi
 			if($_POST['submit'] == "Tambah Transaksi"){
 				insertTransaksi($_POST['jumlah'], $_POST['pelanggan'], $_POST['karyawan'], $_POST['dokter'], $_POST['obat']);
 				updateStokObat($_POST['obat'], $_POST['jumlah']);
@@ -56,23 +65,24 @@ error_reporting(0);
 				updateTransaksi($_POST['primary'], $_POST['jumlah'], $_POST['pelanggan'], $_POST['karyawan'], $_POST['dokter'], $_POST['obat']);			
 				header("Location: kelola.php?kelola=transaksi");
 			}
+			//Selesai tombol edit tambah Transaksi
 		}
-		else if(isset($_GET['hapus'])) {
-			if($_GET['hapus'] == "obat"){
+		else if(isset($_GET['hapus'])) { // ini buat tombol aksi hapus
+			if($_GET['hapus'] == "obat"){ // ini buat tombol aksi hapus obat
 				hapusObat($_GET['primary']);			
 				header("Location: kelola.php?kelola=obat");
 			}
-			elseif($_GET['hapus'] == "transaksi"){
+			elseif($_GET['hapus'] == "transaksi"){ // ini buat tombol aksi hapus transaksi
 				hapusTransaksi($_GET['primary']);
 				header("Location: kelola.php?kelola=transaksi");
 			}
-			else{
+			else{ // ini buat tombol aksi hapus manusia (dokter, pelanggan, Karyawan)
 				hapusManusia($_GET['hapus'], $_GET['primary'], $_POST['nama'], $_POST['no_telp'], $_POST['jenis_kelamin'], $_POST['alamat']);			
 				header("Location: kelola.php?kelola=".$_GET['hapus']);
 			}
 		}
-		else if(isset($_GET['kelola'])) {
-			if ($_GET['kelola'] == "dokter" || $_GET['kelola'] == "edit_dokter") {
+		else if(isset($_GET['kelola'])) { // ini buat kalau habis tekan tombol kelola pas di index
+			if ($_GET['kelola'] == "dokter" || $_GET['kelola'] == "edit_dokter") { //buat edit sama tambah data dokter
 				if ($_GET['kelola'] == "edit_dokter"){
 					$res = getSingleManusia('dokter', $_GET['primary']);
 					$manusia = mysqli_fetch_array($res);
@@ -162,7 +172,7 @@ error_reporting(0);
 				<a href="index.php">kembali ke Index</a>
 				<?php
 			}
-			else if($_GET['kelola'] == "karyawan" || $_GET['kelola'] == "edit_karyawan"){
+			else if($_GET['kelola'] == "karyawan" || $_GET['kelola'] == "edit_karyawan"){ //buat edit sama tambah data karyawan
 				if ($_GET['kelola'] == "edit_karyawan"){
 					$res = getSingleManusia('karyawan', $_GET['primary']);
 					$manusia = mysqli_fetch_array($res);
@@ -252,7 +262,7 @@ error_reporting(0);
 				<a href="index.php">kembali ke Index</a>
 				<?php
 			}
-			else if($_GET['kelola'] == "pelanggan" || $_GET['kelola'] == "edit_pelanggan"){
+			else if($_GET['kelola'] == "pelanggan" || $_GET['kelola'] == "edit_pelanggan"){ //buat edit sama tambah data pelanggan
 				if ($_GET['kelola'] == "edit_pelanggan"){
 					$res = getSingleManusia('pelanggan', $_GET['primary']);
 					$manusia = mysqli_fetch_array($res);
@@ -342,7 +352,7 @@ error_reporting(0);
 				<a href="index.php">kembali ke Index</a>
 				<?php
 			}
-			else if($_GET['kelola'] == "obat" || $_GET['kelola'] == "edit_obat"){
+			else if($_GET['kelola'] == "obat" || $_GET['kelola'] == "edit_obat"){ //buat edit sama tambah data obat
 				if ($_GET['kelola'] == "edit_obat"){
 					$res = getSingleObat($_GET['primary']);
 					$obat = mysqli_fetch_array($res);
@@ -427,7 +437,7 @@ error_reporting(0);
 				<a href="index.php">kembali ke Index</a>
 				<?php
 			}
-			else if($_GET['kelola'] == "transaksi" || $_GET['kelola'] == "edit_transaksi"){
+			else if($_GET['kelola'] == "transaksi" || $_GET['kelola'] == "edit_transaksi"){ //buat edit sama tambah data transaksi
 				if ($_GET['kelola'] == "edit_transaksi"){
 					$res = getSingleTransaksi($_GET['primary']);
 					$transaksi = mysqli_fetch_array($res);

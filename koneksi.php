@@ -3,7 +3,7 @@
 	$conn = mysqli_connect("localhost", "root", "", "apotik");
 	//End
 	
-	//Manusia
+	//CRUD Manusia, Ini buat tabel Pelanggan, Dokter, Karyawan
 	function getSingleManusia($tabel, $primary){
 		global $conn;
 		$sql = "select * from $tabel where no_primary = $primary";
@@ -41,7 +41,7 @@
 	}
 	//End
 
-	//Obat
+	//CRUD obat 
 	function getSingleObat($primary){
 		global $conn;
 		$sql = "select * from obat where no_obat = $primary";
@@ -88,7 +88,7 @@
 	}
 	//End
 
-	//Transaksi
+	//CRUD Transaksi
 	function getSingleTransaksi($primary){
 		global $conn;
 		$sql = "select * from transaksi where no_transaksi = $primary";
@@ -124,7 +124,7 @@
 	}
 	//End
 
-	//function else
+	//function lain - lain
 	function getCurrentTanggal(){
 		return date("d/m/Y");
 	}
