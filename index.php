@@ -8,7 +8,8 @@
 	</head>
 	<body>
 		<div class = "dokter" style="margin-bottom:20px;">
-			<h3 style="margin-bottom:0;">Dokter</h3>
+			<h3 style="margin-bottom:0;display:inline">Dokter</h3>
+			<a href="kelola.php?kelola=dokter" style="font-size:12px">(kelola dokter)</a>
 			<table border="1">
 				<tr>
 					<td>Nomor Dokter</td>
@@ -23,7 +24,7 @@
 						echo '
 						<tr>
 							<td>'.$row["no_primary"].'</td>
-							<td>'.$row["nama_dokter"].'</td>
+							<td>'.$row["nama"].'</td>
 							<td>'.$row["no_telp"].'</td>
 							<td>'.$row["jenis_kelamin"].'</td>
 							<td>'.$row["alamat"].'</td>
@@ -34,7 +35,8 @@
 			</table>
 		</div>
 		<div class = "karyawan" style="margin-bottom:20px;">
-			<h3 style="margin-bottom:0;">Karyawan</h3>
+			<h3 style="margin-bottom:0;display:inline">Karyawan</h3>
+			<a href="kelola.php?kelola=karyawan" style="font-size:12px">(kelola karyawan)</a>
 			<table border="1">
 				<tr>
 					<td>Nomor karyawan</td>
@@ -49,7 +51,7 @@
 						echo '
 						<tr>
 							<td>'.$row["no_primary"].'</td>
-							<td>'.$row["nama_karyawan"].'</td>
+							<td>'.$row["nama"].'</td>
 							<td>'.$row["no_telp"].'</td>
 							<td>'.$row["jenis_kelamin"].'</td>
 							<td>'.$row["alamat"].'</td>
@@ -60,7 +62,8 @@
 			</table>
 		</div>
 		<div class = "pelanggan" style="margin-bottom:20px;">
-			<h3 style="margin-bottom:0;">Pelanggan</h3>
+			<h3 style="margin-bottom:0;display:inline">Pelanggan</h3>
+			<a href="kelola.php?kelola=pelanggan" style="font-size:12px">(kelola pelanggan)</a>
 			<table border="1">
 				<tr>
 					<td>Nomor Pelanggan</td>
@@ -75,7 +78,7 @@
 						echo '
 						<tr>
 							<td>'.$row["no_primary"].'</td>
-							<td>'.$row["nama_pelanggan"].'</td>
+							<td>'.$row["nama"].'</td>
 							<td>'.$row["no_telp"].'</td>
 							<td>'.$row["jenis_kelamin"].'</td>
 							<td>'.$row["alamat"].'</td>
@@ -86,7 +89,8 @@
 			</table>
 		</div>
 		<div class = "obat" style="margin-bottom:20px;">
-			<h3 style="margin-bottom:0;">Obat</h3>
+			<h3 style="margin-bottom:0;display:inline">Obat</h3>
+			<a href="kelola.php?kelola=obat" style="font-size:12px">(kelola obat)</a>
 			<table border="1">
 				<tr>
 					<td>Nomor Obat</td>
@@ -112,7 +116,8 @@
 			</table>
 		</div>
 		<div class = "Transaksi" style="margin-bottom:20px;">
-			<h3 style="margin-bottom:0;">Obat</h3>
+			<h3 style="margin-bottom:0;display:inline">Transaksi</h3>
+			<a href="kelola.php?kelola=transaksi" style="font-size:12px">(kelola dokter)</a>
 			<table border="1">
 				<tr>
 					<td>Nomor Transaksi</td>
@@ -141,9 +146,9 @@
 							<td>'.$row["tanggal_transaksi"].'</td>
 							<td>'.$row["jumlah_obat"].' buah</td>
 							<td>Rp '.$row["biaya_transaksi"].'</td>
-							<td>'.$pelanggan['nama_pelanggan'].'</td>
-							<td>'.$karyawan['nama_karyawan'].'</td>
-							<td>'.$dokter['nama_dokter'].'</td>
+							<td>'.$pelanggan['nama'].'</td>
+							<td>'.$karyawan['nama'].'</td>
+							<td>'.$dokter['nama'].'</td>
 							<td>'.$obat['nama_obat'].'</td>
 						</tr>
 						';

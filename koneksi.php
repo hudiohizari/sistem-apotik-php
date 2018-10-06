@@ -14,6 +14,28 @@
 		$sql = "select * from $tabel";
 		return mysqli_query($conn, $sql);
 	}
+	function insertManusia($tabel, $nama, $no_telp, $jenis_kelamin, $alamat){
+		global $conn;
+		$sql = "insert into $tabel values ('', '$nama', '$no_telp', '$jenis_kelamin', '$alamat')";
+		mysqli_query($conn, $sql);
+	}
+	function updateManusia($tabel, $primary, $nama, $no_telp, $jenis_kelamin, $alamat){
+		global $conn;
+		$sql = "
+			update $tabel set
+			nama = '$nama',
+			no_telp = '$no_telp',
+			jenis_kelamin = '$jenis_kelamin',
+			alamat = '$alamat'
+			where no_primary = $primary
+		";
+		mysqli_query($conn, $sql);
+	}
+	function hapusManusia($tabel, $primary){
+		global $conn;
+		$sql = "delete from $tabel where no_primary = $primary";
+		mysqli_query($conn, $sql);
+	}
 	//End
 
 	//Obat
