@@ -37,7 +37,7 @@ error_reporting(0);
 				updateManusia('pelanggan', $_POST['primary'], $_POST['nama'], $_POST['no_telp'], $_POST['jenis_kelamin'], $_POST['alamat']);			
 				header("Location: kelola.php?kelola=pelanggan");
 			}
-
+			
 			if($_POST['submit'] == "Tambah Obat"){
 				insertObat($_POST['nama'], $_POST['jenis'], $_POST['harga'], $_POST['stok']);
 				header("Location: kelola.php?kelola=obat");
@@ -46,6 +46,16 @@ error_reporting(0);
 				updateObat($_POST['primary'], $_POST['nama'], $_POST['jenis'], $_POST['harga'], $_POST['stok']);			
 				header("Location: kelola.php?kelola=obat");
 			}
+
+			if($_POST['submit'] == "Tambah Transaksi"){
+				insertTransaksi($_POST['jumlah'], $_POST['pelanggan'], $_POST['karyawan'], $_POST['dokter'], $_POST['obat']);
+				updateStokObat($_POST['obat'], $_POST['jumlah']);
+				header("Location: kelola.php?kelola=transaksi");
+			}
+			else if($_POST['submit'] == "Edit Transaksi"){
+				updateTransaksi($_POST['primary'], $_POST['jumlah'], $_POST['pelanggan'], $_POST['karyawan'], $_POST['dokter'], $_POST['obat']);			
+				header("Location: kelola.php?kelola=transaksi");
+			}
 		}
 		else if(isset($_GET['hapus'])) {
 			if($_GET['hapus'] == "obat"){
@@ -53,6 +63,8 @@ error_reporting(0);
 				header("Location: kelola.php?kelola=obat");
 			}
 			elseif($_GET['hapus'] == "transaksi"){
+				hapusTransaksi($_GET['primary']);
+				header("Location: kelola.php?kelola=transaksi");
 			}
 			else{
 				hapusManusia($_GET['hapus'], $_GET['primary'], $_POST['nama'], $_POST['no_telp'], $_POST['jenis_kelamin'], $_POST['alamat']);			
@@ -415,8 +427,164 @@ error_reporting(0);
 				<a href="index.php">kembali ke Index</a>
 				<?php
 			}
-			else if($_GET['kelola'] == "transaksi"){
-	
+			else if($_GET['kelola'] == "transaksi" || $_GET['kelola'] == "edit_transaksi"){
+				if ($_GET['kelola'] == "edit_transaksi"){
+					$res = getSingleTransaksi($_GET['primary']);
+					$transaksi = mysqli_fetch_array($res);
+				}
+				?>
+				<form action="kelola.php" method="post">
+					<?php
+					if($_GET['kelola'] == "transaksi"){
+						?>
+						<h3 style="margin-bottom:10px;display:inline">Tambah Transaksi</h3>
+						<?php
+					}
+					else{
+						?>
+						<h3 style="margin-bottom:10px;display:inline">Edit Transaksi</h3>
+						<input type="hidden" name="primary" size="25" value="<?php echo $transaksi['no_transaksi']; ?>">
+						<?php
+					}
+					?>
+					<table border="0">
+						<tr>
+							<td>Jumlah Obat</td>
+							<td><input type="number" name="jumlah" size="25" value="<?php echo $transaksi['jumlah_obat']; ?>"></td>
+						</tr>
+						<tr>
+							<td>Nama pelanggan</td>
+							<td>
+								<select name="pelanggan">
+									<?php
+									$result = getAllManusia("pelanggan");
+									while($row = mysqli_fetch_array($result)) {
+										if($transaksi['no_pelanggan'] == $row['no_primary']){
+											echo "<option selected value=".$row['no_primary'].">".$row['nama']."</option>";
+										}
+										else{
+											echo "<option value=".$row['no_primary'].">".$row['nama']."</option>";
+										}
+									}
+									?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Dokter yang melayani</td>
+							<td>
+								<select name="dokter">
+									<?php
+									$result = getAllManusia("dokter");
+									while($row = mysqli_fetch_array($result)) {
+										if($transaksi['no_dokter'] == $row['no_primary']){
+											echo "<option selected value=".$row['no_primary'].">".$row['nama']."</option>";
+										}
+										else{
+											echo "<option value=".$row['no_primary'].">".$row['nama']."</option>";
+										}
+									}
+									?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Nama karyawan</td>
+							<td>
+								<select name="karyawan">
+									<?php
+									$result = getAllManusia("karyawan");
+									while($row = mysqli_fetch_array($result)) {
+										if($transaksi['no_karyawan'] == $row['no_primary']){
+											echo "<option selected value=".$row['no_primary'].">".$row['nama']."</option>";
+										}
+										else{
+											echo "<option value=".$row['no_primary'].">".$row['nama']."</option>";
+										}
+									}
+									?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>Obat yang dipesan</td>
+							<td>
+								<select name="obat">
+									<?php
+									$result = getAllObat();
+									while($row = mysqli_fetch_array($result)) {
+										if($transaksi['no_obat'] == $row['no_obat']){
+											echo "<option selected value=".$row['no_obat'].">".$row['nama_obat']."</option>";
+										}
+										else{
+											echo "<option value=".$row['no_obat'].">".$row['nama_obat']."</option>";
+										}
+									}
+									?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<?php
+							if($_GET['kelola'] == "transaksi"){
+								?>
+								<td><input type="submit" value="Tambah Transaksi" name="submit"></td>
+								<?php
+							}
+							else{
+								?>
+								<td><input type="submit" value="Edit Transaksi" name="submit"></td>
+								<?php
+							}
+							?>
+						</tr>
+					</table>
+				</form>
+				<h3 style="margin-bottom:0;margin-top:20px;">Daftar Transaksi</h3>
+				<table border="1">
+					<tr>
+						<td>Nomor Transaksi</td>
+						<td>Tanggal Transaksi</td>
+						<td>Jumlah Obat</td>
+						<td>Biaya</td>
+						<td>Nama Pelanggan</td>
+						<td>Nama Karyawan</td>
+						<td>Nama Dokter</td>
+						<td>Nama Obat</td>
+						<td>Aksi</td>
+					</tr>
+					<?php
+						$result = getAllTransaksi();
+						while($row = mysqli_fetch_array($result)) {
+							$res = getSingleManusia("pelanggan", $row["no_pelanggan"]);
+							$pelanggan = mysqli_fetch_array($res);
+							$res = getSingleManusia("karyawan", $row["no_karyawan"]);
+							$karyawan = mysqli_fetch_array($res);
+							$res = getSingleManusia("dokter", $row["no_dokter"]);
+							$dokter = mysqli_fetch_array($res);
+							$res = getSingleObat($row["no_obat"]);
+							$obat = mysqli_fetch_array($res);
+							echo '
+							<tr>
+								<td>'.$row["no_transaksi"].'</td>
+								<td>'.$row["tanggal_transaksi"].'</td>
+								<td>'.$row["jumlah_obat"].' buah</td>
+								<td>Rp '.$row["jumlah_obat"] * $obat["harga"].'</td>
+								<td>'.$pelanggan['nama'].'</td>
+								<td>'.$karyawan['nama'].'</td>
+								<td>'.$dokter['nama'].'</td>
+								<td>'.$obat['nama_obat'].'</td>
+								<td>
+									<a href="kelola.php?kelola=edit_transaksi&primary='.$row["no_transaksi"].'">edit</a> |
+									<a href="kelola.php?hapus=transaksi&primary='.$row["no_transaksi"].'">hapus</a>
+								</td>
+							</tr>
+							';
+						}
+					?>
+				</table>
+				<a href="index.php">kembali ke Index</a>
+				<?php
 			}
 			else{
 				header("Location: index.php");

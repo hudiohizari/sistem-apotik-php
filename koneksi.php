@@ -28,13 +28,16 @@
 			jenis_kelamin = '$jenis_kelamin',
 			alamat = '$alamat'
 			where no_primary = $primary
-		";
+			";
 		mysqli_query($conn, $sql);
 	}
 	function hapusManusia($tabel, $primary){
 		global $conn;
 		$sql = "delete from $tabel where no_primary = $primary";
 		mysqli_query($conn, $sql);
+		if (!mysqli_query($conn, $sql)){
+			echo("Error description: " . mysqli_error($conn));
+		}
 	}
 	//End
 
@@ -66,6 +69,18 @@
 		";
 		mysqli_query($conn, $sql);
 	}
+	function updateStokObat($primary, $jumlah_beli){
+		global $conn;
+		$res = getSingleObat($row["no_obat"]);
+		$obat = mysqli_fetch_array($res);
+		$stok = $obat['stok'] - $jumlah_beli;
+		$sql = "
+			update obat set
+			stok = '$stok'
+			where no_obat = $primary
+		";
+		mysqli_query($conn, $sql);
+	}
 	function hapusObat($primary){
 		global $conn;
 		$sql = "delete from obat where no_obat = $primary";
@@ -83,6 +98,35 @@
 		global $conn;
 		$sql = "select * from transaksi";
 		return mysqli_query($conn, $sql);
+	}
+	function insertTransaksi($jumlah_obat, $primary_pelanggan, $primary_karyawan, $primary_dokter, $primary_obat){
+		global $conn;
+		$sql = "insert into transaksi values ('', '".getCurrentTanggal()."', '$primary_pelanggan', '$primary_karyawan', '$primary_dokter', '$primary_obat', '$jumlah_obat')";
+		mysqli_query($conn, $sql);
+	}
+	function updateTransaksi($primary, $jumlah_obat, $primary_pelanggan, $primary_karyawan, $primary_dokter, $primary_obat){
+		global $conn;
+		$sql = "
+			update transaksi set
+			jumlah_obat = '$jumlah_obat',
+			no_pelanggan = '$primary_pelanggan',
+			no_karyawan= '$primary_karyawan',
+			no_dokter = '$primary_dokter',
+			no_obat = '$primary_obat'
+			where no_transaksi = $primary
+		";
+		mysqli_query($conn, $sql);
+	}
+	function hapusTransaksi($primary){
+		global $conn;
+		$sql = "delete from transaksi where no_transaksi = $primary";
+		mysqli_query($conn, $sql);
+	}
+	//End
+
+	//function else
+	function getCurrentTanggal(){
+		return date("d/m/Y");
 	}
 	//End
 

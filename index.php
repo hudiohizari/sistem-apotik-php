@@ -117,7 +117,7 @@
 		</div>
 		<div class = "Transaksi" style="margin-bottom:20px;">
 			<h3 style="margin-bottom:0;display:inline">Transaksi</h3>
-			<a href="kelola.php?kelola=transaksi" style="font-size:12px">(kelola dokter)</a>
+			<a href="kelola.php?kelola=transaksi" style="font-size:12px">(kelola transaksi)</a>
 			<table border="1">
 				<tr>
 					<td>Nomor Transaksi</td>
@@ -145,7 +145,7 @@
 							<td>'.$row["no_transaksi"].'</td>
 							<td>'.$row["tanggal_transaksi"].'</td>
 							<td>'.$row["jumlah_obat"].' buah</td>
-							<td>Rp '.$row["biaya_transaksi"].'</td>
+							<td>Rp '.$row["jumlah_obat"] * $obat["harga"].'</td>
 							<td>'.$pelanggan['nama'].'</td>
 							<td>'.$karyawan['nama'].'</td>
 							<td>'.$dokter['nama'].'</td>

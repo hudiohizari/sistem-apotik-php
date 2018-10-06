@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 05, 2018 at 04:35 PM
+-- Generation Time: Oct 06, 2018 at 05:21 PM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 7.2.10
 
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `dokter` (
   `no_primary` int(4) NOT NULL,
-  `nama_dokter` varchar(50) NOT NULL,
+  `nama` varchar(50) NOT NULL,
   `no_telp` varchar(15) NOT NULL,
   `jenis_kelamin` varchar(20) NOT NULL,
   `alamat` varchar(200) NOT NULL
@@ -40,9 +40,10 @@ CREATE TABLE `dokter` (
 -- Dumping data for table `dokter`
 --
 
-INSERT INTO `dokter` (`no_primary`, `nama_dokter`, `no_telp`, `jenis_kelamin`, `alamat`) VALUES
-(1, 'H. Hizari ', '088218000084', 'laki - laki', 'jalan dimana'),
-(2, 'Hudio H.', '081234567890', 'laki - laki', 'Jalan di bandung nomor 192029');
+INSERT INTO `dokter` (`no_primary`, `nama`, `no_telp`, `jenis_kelamin`, `alamat`) VALUES
+(1, 'H. Loki', '088218000084', 'laki - laki', 'jalan dimana ya'),
+(2, 'Koli Lintang', '081234567890', 'laki - laki', 'Jalan di bandung nomor 192029'),
+(12, 'H. Lulung', '082131312212', 'laki - laki', 'Jalan lulung');
 
 -- --------------------------------------------------------
 
@@ -52,7 +53,7 @@ INSERT INTO `dokter` (`no_primary`, `nama_dokter`, `no_telp`, `jenis_kelamin`, `
 
 CREATE TABLE `karyawan` (
   `no_primary` int(4) NOT NULL,
-  `nama_karyawan` varchar(50) NOT NULL,
+  `nama` varchar(50) NOT NULL,
   `no_telp` varchar(15) NOT NULL,
   `jenis_kelamin` varchar(20) NOT NULL,
   `alamat` varchar(200) NOT NULL
@@ -62,8 +63,9 @@ CREATE TABLE `karyawan` (
 -- Dumping data for table `karyawan`
 --
 
-INSERT INTO `karyawan` (`no_primary`, `nama_karyawan`, `no_telp`, `jenis_kelamin`, `alamat`) VALUES
-(1, 'Karyawan Baik', '082121212121', 'perempuan', 'Jalan di apotik');
+INSERT INTO `karyawan` (`no_primary`, `nama`, `no_telp`, `jenis_kelamin`, `alamat`) VALUES
+(1, 'Karyawan Baik', '082121212121', 'laki - laki', 'Jalan di apotik'),
+(6, 'Karyawan Jahat', '082137121739', 'laki - laki', 'Jalan di rumah sakit');
 
 -- --------------------------------------------------------
 
@@ -84,7 +86,8 @@ CREATE TABLE `obat` (
 --
 
 INSERT INTO `obat` (`no_obat`, `nama_obat`, `jenis_obat`, `harga`, `stok`) VALUES
-(1, 'Obat Galau', 'Penenang', 340000, 50);
+(1, 'Anti Maag', 'Pereda Nyeri', 5400, 53),
+(4, 'Paracet', 'Pereda Nyeri', 2345, 400);
 
 -- --------------------------------------------------------
 
@@ -94,7 +97,7 @@ INSERT INTO `obat` (`no_obat`, `nama_obat`, `jenis_obat`, `harga`, `stok`) VALUE
 
 CREATE TABLE `pelanggan` (
   `no_primary` int(4) NOT NULL,
-  `nama_pelanggan` varchar(50) NOT NULL,
+  `nama` varchar(50) NOT NULL,
   `no_telp` varchar(15) NOT NULL,
   `jenis_kelamin` varchar(20) NOT NULL,
   `alamat` varchar(200) NOT NULL
@@ -104,8 +107,9 @@ CREATE TABLE `pelanggan` (
 -- Dumping data for table `pelanggan`
 --
 
-INSERT INTO `pelanggan` (`no_primary`, `nama_pelanggan`, `no_telp`, `jenis_kelamin`, `alamat`) VALUES
-(1, 'Hudio Hizari', '085822333459', 'laki - laki', 'Jalan jalan, Bandung, Jawa Barat');
+INSERT INTO `pelanggan` (`no_primary`, `nama`, `no_telp`, `jenis_kelamin`, `alamat`) VALUES
+(1, 'Komeng', '085822333459', 'laki - laki', 'Jalan jalan, Bandung, Jawa Barat'),
+(3, 'Ahmad Albabe', '089887652188', 'laki - laki', 'Jalan babik kecil dirumah');
 
 -- --------------------------------------------------------
 
@@ -116,7 +120,6 @@ INSERT INTO `pelanggan` (`no_primary`, `nama_pelanggan`, `no_telp`, `jenis_kelam
 CREATE TABLE `transaksi` (
   `no_transaksi` int(4) NOT NULL,
   `tanggal_transaksi` varchar(20) NOT NULL,
-  `biaya_transaksi` int(10) NOT NULL,
   `no_pelanggan` int(4) NOT NULL,
   `no_karyawan` int(4) NOT NULL,
   `no_dokter` int(4) NOT NULL,
@@ -128,8 +131,10 @@ CREATE TABLE `transaksi` (
 -- Dumping data for table `transaksi`
 --
 
-INSERT INTO `transaksi` (`no_transaksi`, `tanggal_transaksi`, `biaya_transaksi`, `no_pelanggan`, `no_karyawan`, `no_dokter`, `no_obat`, `jumlah_obat`) VALUES
-(1, '05/10/2018', 17000000, 1, 1, 1, 1, 5);
+INSERT INTO `transaksi` (`no_transaksi`, `tanggal_transaksi`, `no_pelanggan`, `no_karyawan`, `no_dokter`, `no_obat`, `jumlah_obat`) VALUES
+(1, '05/10/2018', 1, 1, 1, 1, 3),
+(6, '06/10/2018', 3, 1, 2, 4, 13),
+(8, '06/10/2018', 3, 1, 1, 1, 2);
 
 --
 -- Indexes for dumped tables
@@ -163,7 +168,11 @@ ALTER TABLE `pelanggan`
 -- Indexes for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  ADD PRIMARY KEY (`no_transaksi`);
+  ADD PRIMARY KEY (`no_transaksi`),
+  ADD KEY `foreign_dokter` (`no_dokter`),
+  ADD KEY `foreign_karyawan` (`no_karyawan`),
+  ADD KEY `foreign_obat` (`no_obat`),
+  ADD KEY `foreign_pelanggan` (`no_pelanggan`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -173,25 +182,44 @@ ALTER TABLE `transaksi`
 -- AUTO_INCREMENT for table `dokter`
 --
 ALTER TABLE `dokter`
-  MODIFY `no_primary` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `no_primary` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `karyawan`
 --
 ALTER TABLE `karyawan`
-  MODIFY `no_primary` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `no_primary` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `obat`
+--
+ALTER TABLE `obat`
+  MODIFY `no_obat` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `pelanggan`
 --
 ALTER TABLE `pelanggan`
-  MODIFY `no_primary` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `no_primary` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `no_transaksi` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `no_transaksi` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `transaksi`
+--
+ALTER TABLE `transaksi`
+  ADD CONSTRAINT `foreign_dokter` FOREIGN KEY (`no_dokter`) REFERENCES `dokter` (`no_primary`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `foreign_karyawan` FOREIGN KEY (`no_karyawan`) REFERENCES `karyawan` (`no_primary`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `foreign_obat` FOREIGN KEY (`no_obat`) REFERENCES `obat` (`no_obat`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `foreign_pelanggan` FOREIGN KEY (`no_pelanggan`) REFERENCES `pelanggan` (`no_primary`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
