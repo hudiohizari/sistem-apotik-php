@@ -1,0 +1,2 @@
+nanti buat dulu database namanya apotik
+terus pilih menu import, pilih file apotik.sql

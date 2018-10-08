@@ -35,9 +35,6 @@
 		global $conn;
 		$sql = "delete from $tabel where no_primary = $primary";
 		mysqli_query($conn, $sql);
-		if (!mysqli_query($conn, $sql)){
-			echo("Error description: " . mysqli_error($conn));
-		}
 	}
 	//End
 
@@ -69,9 +66,9 @@
 		";
 		mysqli_query($conn, $sql);
 	}
-	function updateStokObat($primary, $jumlah_beli){
+	/*function updateStokObat($primary, $jumlah_beli){
 		global $conn;
-		$res = getSingleObat($row["no_obat"]);
+		$res = getSingleObat($primary);
 		$obat = mysqli_fetch_array($res);
 		$stok = $obat['stok'] - $jumlah_beli;
 		$sql = "
@@ -80,7 +77,7 @@
 			where no_obat = $primary
 		";
 		mysqli_query($conn, $sql);
-	}
+	}*/
 	function hapusObat($primary){
 		global $conn;
 		$sql = "delete from obat where no_obat = $primary";

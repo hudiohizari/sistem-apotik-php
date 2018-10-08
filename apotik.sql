@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 06, 2018 at 05:21 PM
+-- Generation Time: Oct 08, 2018 at 02:59 AM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 7.2.10
 
@@ -87,7 +87,7 @@ CREATE TABLE `obat` (
 
 INSERT INTO `obat` (`no_obat`, `nama_obat`, `jenis_obat`, `harga`, `stok`) VALUES
 (1, 'Anti Maag', 'Pereda Nyeri', 5400, 53),
-(4, 'Paracet', 'Pereda Nyeri', 2345, 400);
+(4, 'Paracet', 'Pereda Nyeri', 2345, 490);
 
 -- --------------------------------------------------------
 
@@ -132,9 +132,30 @@ CREATE TABLE `transaksi` (
 --
 
 INSERT INTO `transaksi` (`no_transaksi`, `tanggal_transaksi`, `no_pelanggan`, `no_karyawan`, `no_dokter`, `no_obat`, `jumlah_obat`) VALUES
-(1, '05/10/2018', 1, 1, 1, 1, 3),
+(1, '27/9/2018', 1, 1, 1, 1, 3),
 (6, '06/10/2018', 3, 1, 2, 4, 13),
-(8, '06/10/2018', 3, 1, 1, 1, 2);
+(8, '06/10/2018', 3, 1, 1, 1, 2),
+(10, '08/10/2018', 1, 6, 12, 4, 53);
+
+--
+-- Triggers `transaksi`
+--
+DELIMITER $$
+CREATE TRIGGER `UpdateStokAfterDeleteTransaksi` AFTER DELETE ON `transaksi` FOR EACH ROW BEGIN
+    UPDATE obat o 
+	SET o.stok = o.stok + OLD.jumlah_obat
+	WHERE o.no_obat = OLD.no_obat;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `UpdateStokAfterInsertTransaksi` AFTER INSERT ON `transaksi` FOR EACH ROW BEGIN
+    UPDATE obat o 
+	SET o.stok = o.stok - NEW.jumlah_obat
+	WHERE o.no_obat = NEW.no_obat;
+END
+$$
+DELIMITER ;
 
 --
 -- Indexes for dumped tables
@@ -206,7 +227,7 @@ ALTER TABLE `pelanggan`
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `no_transaksi` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `no_transaksi` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- Constraints for dumped tables

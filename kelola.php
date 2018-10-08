@@ -6,7 +6,7 @@ error_reporting(0);
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Kelola </title>
+		<title>Kelola</title>
 	</head>
 	<body>
 		<?php
@@ -58,7 +58,7 @@ error_reporting(0);
 			//Edit tombol tambah Transaksi
 			if($_POST['submit'] == "Tambah Transaksi"){
 				insertTransaksi($_POST['jumlah'], $_POST['pelanggan'], $_POST['karyawan'], $_POST['dokter'], $_POST['obat']);
-				updateStokObat($_POST['obat'], $_POST['jumlah']);
+				//updateStokObat($_POST['obat'], $_POST['jumlah']);
 				header("Location: kelola.php?kelola=transaksi");
 			}
 			else if($_POST['submit'] == "Edit Transaksi"){
